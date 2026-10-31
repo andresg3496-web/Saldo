@@ -1,21 +1,48 @@
 {
   "name": "SALDO",
   "short_name": "SALDO",
-  "description": "Control simple de ingresos y egresos",
-  "start_url": "/",
+  "description": "App para controlar tu saldo, ingresos y egresos diarios",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "display_override": ["standalone", "window-controls-overlay"],
+  "orientation": "any",
+  "background_color": "#000000",
+  "theme_color": "#22c55e",
+  "categories": ["finance", "productivity"],
+  "lang": "es",
+  "dir": "ltr",
+  "scope": ".",
   "icons": [
     {
       "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Ver Saldo",
+      "url": ".",
+      "description": "Ver mi saldo actual"
     }
   ]
 }
