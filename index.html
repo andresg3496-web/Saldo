@@ -80,6 +80,41 @@ $('incomeBtn').onclick=()=>open('income');$('expenseBtn').onclick=()=>open('expe
 $('movementForm').onsubmit=e=>{e.preventDefault();let amount=Number($('amountInput').value);if(!Number.isFinite(amount)||amount<=0)return;rows.push({id:Date.now()+Math.random(),type:$('type').value,amount:Math.round(amount*100)/100,description:$('description').value.trim(),date:$('dateInput').value});save();render();$('formCard').hidden=true};
 $('clear').onclick=()=>{if(rows.length&&confirm('¿Borrar todos los movimientos? No se puede deshacer.')){rows=[];save();render()}};
 $('export').onclick=()=>{let data=[['Fecha','Tipo','Concepto','Cantidad'],...rows.map(x=>[x.date,x.type==='income'?'Ingreso':'Egreso',x.description,x.amount])];let csv=data.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');let a=document.createElement('a'),u=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.href=u;a.download='saldo-movimientos.csv';a.click();URL.revokeObjectURL(u)};
-render();if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+const themeButton = $('themeToggle');
+const themeKey = 'saldo_theme_preference';
+const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+let themeMode = localStorage.getItem(themeKey) || 'auto';
+
+if (!['auto', 'light', 'dark'].includes(themeMode)) {
+  themeMode = 'auto';
+}
+
+function updateTheme() {
+  const dark = themeMode === 'dark' ||
+    (themeMode === 'auto' && systemTheme.matches);
+
+  document.documentElement.dataset.theme =
+    dark ? 'dark' : 'light';
+
+  themeButton.textContent =
+    themeMode === 'auto' ? '◐ Auto' :
+    themeMode === 'light' ? '☀ Claro' : '☾ Oscuro';
+}
+
+themeButton.onclick = () => {
+  themeMode =
+    themeMode === 'auto' ? 'light' :
+    themeMode === 'light' ? 'dark' : 'auto';
+
+  localStorage.setItem(themeKey, themeMode);
+  updateTheme();
+};
+
+systemTheme.addEventListener('change', () => {
+  if (themeMode === 'auto') updateTheme();
+});
+
+updateTheme();render();if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 </script>
 </body></html>
